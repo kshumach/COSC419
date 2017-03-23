@@ -22,7 +22,7 @@ public class charSelect : MonoBehaviour {
                 GameObject[][] planes = Camera.main.GetComponent<TileMeshGenerator>().planes;
                 for(int i = 0; i < planes.Length; i++)
                 {
-                    for(int j = i; j < planes[i].Length; j++)
+                    for(int j = 0; j < planes[i].Length; j++)
                     {
                         if (planes[i][j].GetComponent<Tile>().Selected)
                         {
