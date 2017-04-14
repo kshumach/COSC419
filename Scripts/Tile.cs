@@ -14,6 +14,14 @@ public class Tile : MonoBehaviour
     private bool isMoving = false;
     private GameObject active = null;
 
+    public int getX()
+    {
+        return this.x;
+    }
+    public int getY()
+    {
+        return this.y;
+    }
     public void setActive(GameObject newActive)
     {
         this.active = newActive;
@@ -42,8 +50,6 @@ public class Tile : MonoBehaviour
     }
     public void move()
     {
-        Debug.Log(gameObject);
-        Debug.Log(active.GetComponent<Character>());
 
         this.active.GetComponent<Character>().goesTo(gameObject);
         this.setCharacter(active);

@@ -15,23 +15,33 @@ public class World : MonoBehaviour {
     void Awake()
     {
         player = GameObject.Find("Cha_Knight");
-        enemy = GameObject.Find("Knight");
+        enemy = GameObject.Find("knight");
         activePlayer = GameObject.Find("Cha_Knight");
     }
 
     void Update()
     {
-        //if (player.GetComponent<Character>().health <= 0 || enemy.GetComponent<Character>().health <= 0)
-        //{
-        //    Debug.Log("Game Over: " + (player.GetComponent<Character>().health <= 0 ? "Player lost" : "Player Won"));
-        //    end = true;
-        //}
-        
+        if (player.GetComponent<Character>().health <= 0 || enemy.GetComponent<Character>().health <= 0)
+        {
+            Debug.Log("Game Over: " + (player.GetComponent<Character>().health <= 0 ? "Player lost" : "Player Won"));
+            end = true;
+            if(player.GetComponent<Character>().health <= 0)
+            {
+                GameObject.Find("End").GetComponent<Text>().text = "You Lose.";
+                GameObject.Find("End").GetComponent<Text>().color = Color.red;
+            } else
+            {
+                GameObject.Find("End").GetComponent<Text>().text = "You Won!";
+                GameObject.Find("End").GetComponent<Text>().color = Color.blue;
+            }
+        }
         if (nextTo(player, enemy))
         {
             Debug.Log("They are next to");
             if(!activePlayer.GetComponent<Character>().hasAttacked)
                 GameObject.Find("Attack").GetComponent<Button>().interactable = true;
+            else
+                GameObject.Find("Attack").GetComponent<Button>().interactable = false;
         } else
         {
             GameObject.Find("Attack").GetComponent<Button>().interactable = false;
@@ -41,14 +51,13 @@ public class World : MonoBehaviour {
 
     public bool nextTo(GameObject g1, GameObject g2)
     {
-        Debug.Log("g1: " + g1.GetComponent<Transform>().position);
-        Debug.Log("g2: " + g2.GetComponent<Transform>().position);
-        bool x = Math.Abs((int) (g1.GetComponent<Transform>().position.x - g2.GetComponent<Transform>().position.x)) == 1;
-        bool y = Math.Abs((int)(g1.GetComponent<Transform>().position.y - g2.GetComponent<Transform>().position.y)) == 1;
+        
+        bool x = Math.Abs((int) (g1.GetComponent<Character>().isAt().GetComponent<Tile>().getX() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getX())) <= 1;
+        bool y = Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getY() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getY())) <= 1;
 
-        Debug.Log(Math.Abs((int)(g1.GetComponent<Transform>().position.x - g2.GetComponent<Transform>().position.x)));
-        Debug.Log(Math.Abs((int)(g1.GetComponent<Transform>().position.y - g2.GetComponent<Transform>().position.y)));
-        return x || y;
+        Debug.Log(Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getX() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getX())) <= 1);
+        Debug.Log(Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getY() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getY())) <= 1);
+        return x && y;
     }
 
     public void nextTurn()
@@ -61,6 +70,7 @@ public class World : MonoBehaviour {
         }
         else
         {
+            activePlayer.GetComponent<Character>().setDefaults();
             activePlayer = player;
         }
             
@@ -68,6 +78,7 @@ public class World : MonoBehaviour {
 
     public void handleAttack()
     {
+        Debug.Log("Ima Chargin ma Laz0r");
         if(activePlayer == player)
         {
             activePlayer.GetComponent<Character>().attack(activePlayer, enemy);
@@ -150,5 +161,25 @@ public class World : MonoBehaviour {
                 }
             }
         }
+    }
+    public static GameObject findClosestPlayableCharacter(GameObject Enemy)
+    {
+        int maxDist = int.MaxValue;
+        GameObject closest = null;
+        foreach (GameObject Friendly in GameObject.FindGameObjectsWithTag("Friendly"))
+        {
+            int thisdistance = (Enemy.GetComponent<Character>().isAt().GetComponent<Tile>().getX() -
+                Friendly.GetComponent<Character>().isAt().GetComponent<Tile>().getX()) +
+            (Enemy.GetComponent<Character>().isAt().GetComponent<Tile>().getY() -
+                Friendly.GetComponent<Character>().isAt().GetComponent<Tile>().getY());
+
+
+            if (thisdistance < maxDist)
+            {
+                maxDist = thisdistance;
+                closest = Friendly;
+            }
+        }
+        return closest;
     }
 }

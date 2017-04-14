@@ -6,6 +6,7 @@ public class TileMeshGenerator : MonoBehaviour {
 
     // Use this for initialization
     public GameObject[][] planes;
+    public static int roundCount = 1;
 	void Start () {
         planes = new GameObject[5][];
         for (int i = 0; i < 5; i++)
@@ -21,13 +22,16 @@ public class TileMeshGenerator : MonoBehaviour {
             }
         }
         planes[1][0].GetComponent<Tile>().setCharacter(GameObject.Find("Cha_Knight"));
+        GameObject.Find("Cha_Knight").GetComponent<Character>().goesTo(planes[1][0]);
         planes[3][1].GetComponent<Tile>().setCharacter(GameObject.Find("knight"));
+        GameObject.Find("knight").GetComponent<Character>().goesTo(planes[3][1]);
+
         //ameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         //ube.transform.position = new Vector3(0, 1.5F, 0);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 
     }
     void OnMouseDown()
