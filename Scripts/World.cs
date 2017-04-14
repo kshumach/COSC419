@@ -35,17 +35,26 @@ public class World : MonoBehaviour {
                 GameObject.Find("End").GetComponent<Text>().color = Color.blue;
             }
         }
-        if (nextTo(player, enemy))
+        if(turnCounter%2 == 1)
         {
-            Debug.Log("They are next to");
-            if(!activePlayer.GetComponent<Character>().hasAttacked)
-                GameObject.Find("Attack").GetComponent<Button>().interactable = true;
+            if (nextTo(player, enemy))
+            {
+                Debug.Log("They are next to");
+                if (!activePlayer.GetComponent<Character>().hasAttacked)
+                    GameObject.Find("Attack").GetComponent<Button>().interactable = true;
+                else
+                    GameObject.Find("Attack").GetComponent<Button>().interactable = false;
+            }
             else
+            {
                 GameObject.Find("Attack").GetComponent<Button>().interactable = false;
-        } else
+            }
+        }
+        else
         {
             GameObject.Find("Attack").GetComponent<Button>().interactable = false;
         }
+        
         
     }
 
