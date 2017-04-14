@@ -68,20 +68,34 @@ public class World : MonoBehaviour {
         Debug.Log(Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getY() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getY())) <= 1);
         return x && y;
     }
+    public static bool isnextTo(GameObject g1, GameObject g2)
+    {
 
+        bool x = Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getX() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getX())) <= 1;
+        bool y = Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getY() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getY())) <= 1;
+
+        Debug.Log(Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getX() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getX())) <= 1);
+        Debug.Log(Math.Abs((int)(g1.GetComponent<Character>().isAt().GetComponent<Tile>().getY() - g2.GetComponent<Character>().isAt().GetComponent<Tile>().getY())) <= 1);
+        return x && y;
+    }
     public void nextTurn()
     {
         turnCounter++;
-        if (activePlayer == player)
-        {
-            activePlayer.GetComponent<Character>().setDefaults();
-            activePlayer = enemy;
-        }
-        else
-        {
-            activePlayer.GetComponent<Character>().setDefaults();
-            activePlayer = player;
-        }
+        activePlayer.GetComponent<Character>().setDefaults();
+        activePlayer = enemy;
+        EnemyTurn.HandleEnemyTurn();
+
+        turnCounter++;
+        //if (activePlayer == player)
+        //{
+        //    activePlayer.GetComponent<Character>().setDefaults();
+        //    activePlayer = enemy;
+        //}
+        //else
+        //{
+        //  activePlayer.GetComponent<Character>().setDefaults();
+        activePlayer = player;
+        //}
             
     }
 

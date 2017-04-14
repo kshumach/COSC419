@@ -30,6 +30,13 @@ public class Character : MonoBehaviour {
     {
         return this.Location;
     }
+    public void EnemyGoesTo(GameObject p)
+    {
+        gameObject.transform.position = p.transform.position;
+        Location.GetComponent<Tile>().setCharacter(null);
+        p.GetComponent<Tile>().setCharacter(gameObject);
+        Location = p;
+    }
 	public void goesTo(GameObject p)
     {
         gameObject.transform.position = p.transform.position;
