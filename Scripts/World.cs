@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class World : MonoBehaviour {
 
@@ -8,6 +10,7 @@ public class World : MonoBehaviour {
     private static GameObject activePlayer = null;
     private static GameObject player = null;
     private static GameObject enemy = null;
+    public bool end = false;
 
     void Awake()
     {
@@ -18,7 +21,34 @@ public class World : MonoBehaviour {
 
     void Update()
     {
-        Debug.Log(activePlayer);
+        //if (player.GetComponent<Character>().health <= 0 || enemy.GetComponent<Character>().health <= 0)
+        //{
+        //    Debug.Log("Game Over: " + (player.GetComponent<Character>().health <= 0 ? "Player lost" : "Player Won"));
+        //    end = true;
+        //}
+        
+        if (nextTo(player, enemy))
+        {
+            Debug.Log("They are next to");
+            if(!activePlayer.GetComponent<Character>().hasAttacked)
+                GameObject.Find("Attack").GetComponent<Button>().interactable = true;
+        } else
+        {
+            GameObject.Find("Attack").GetComponent<Button>().interactable = false;
+        }
+        
+    }
+
+    public bool nextTo(GameObject g1, GameObject g2)
+    {
+        Debug.Log("g1: " + g1.GetComponent<Transform>().position);
+        Debug.Log("g2: " + g2.GetComponent<Transform>().position);
+        bool x = Math.Abs((int) (g1.GetComponent<Transform>().position.x - g2.GetComponent<Transform>().position.x)) == 1;
+        bool y = Math.Abs((int)(g1.GetComponent<Transform>().position.y - g2.GetComponent<Transform>().position.y)) == 1;
+
+        Debug.Log(Math.Abs((int)(g1.GetComponent<Transform>().position.x - g2.GetComponent<Transform>().position.x)));
+        Debug.Log(Math.Abs((int)(g1.GetComponent<Transform>().position.y - g2.GetComponent<Transform>().position.y)));
+        return x || y;
     }
 
     public void nextTurn()
@@ -38,7 +68,13 @@ public class World : MonoBehaviour {
 
     public void handleAttack()
     {
-
+        if(activePlayer == player)
+        {
+            activePlayer.GetComponent<Character>().attack(activePlayer, enemy);
+        } else
+        {
+            activePlayer.GetComponent<Character>().attack(activePlayer, player);
+        }
     }
 
     public static GameObject getActivePlayer()

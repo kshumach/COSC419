@@ -18,10 +18,10 @@ public class Character : MonoBehaviour {
         Location = p;
     }
 
-    public static void attack(Character c1, Character c2)
+    public void attack(GameObject c1, GameObject c2)
     {
-        c2.health -= c1.damage;
-        c1.hasAttacked = true;
+        c2.GetComponent<Character>().health -= c1.GetComponent<Character>().damage;
+        c1.GetComponent<Character>().hasAttacked = true;
     }
 
     public void setDefaults()
